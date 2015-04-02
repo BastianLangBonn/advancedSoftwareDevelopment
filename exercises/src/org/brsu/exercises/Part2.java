@@ -13,13 +13,14 @@ public class Part2 {
 
 	public static void main(String[] args) {
 		Part2 part2 = new Part2();
-		// primeComputer.computePrimesUntilMaxIntegerUsingFirstApproach();
-		part2.computePrimesUntilMaxIntegerSecondApproach();
+		// part2.computeAndPrintPrimesEfficiently(1000000);
+		part2.computeAndPrintPrimesFirstApproach(1000000);
+
 	}
 
-	public void computePrimesUntilMaxIntegerSecondApproach() {
+	public void computeAndPrintPrimesEfficiently(int upperBound) {
 		long startTime = System.currentTimeMillis();
-		List<Integer> primes = computePrimesEfficiently(Integer.MAX_VALUE);
+		List<Integer> primes = computePrimesEfficiently(upperBound);
 		long endTime = System.currentTimeMillis();
 		long timeTaken = endTime - startTime;
 		printOutPrimesAndTimeTaken(primes, timeTaken);
@@ -28,9 +29,9 @@ public class Part2 {
 	/**
 	 * Computes all primes up to MAX_INTEGER using the first approach.
 	 */
-	public void computePrimesUntilMaxIntegerUsingFirstApproach() {
+	public void computeAndPrintPrimesFirstApproach(int upperBound) {
 		long startTime = System.currentTimeMillis();
-		List<Integer> primeNumbers = computePrimeNumbersFirstApproach(Integer.MAX_VALUE);
+		List<Integer> primeNumbers = computePrimeNumbersFirstApproach(upperBound);
 		long endTime = System.currentTimeMillis();
 		long timeTaken = endTime - startTime;
 		printOutPrimesAndTimeTaken(primeNumbers, timeTaken);
@@ -39,9 +40,9 @@ public class Part2 {
 	private void printOutPrimesAndTimeTaken(List<Integer> primeNumbers,
 			long timeTaken) {
 		for (Integer prime : primeNumbers) {
-			System.out.println(prime);
+			// System.out.println(prime);
 		}
-		System.out.println(primeNumbers.size() + "primes found");
+		System.out.println(primeNumbers.size() + " primes found");
 		System.out.println("Time taken for computation: " + timeTaken + "ms");
 	}
 
