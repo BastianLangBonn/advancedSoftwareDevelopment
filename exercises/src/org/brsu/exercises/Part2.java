@@ -7,20 +7,23 @@ import java.util.List;
  * Class containing the code to solve part 2 of exercise 1.
  * 
  * @author bastian
- *
+ * 
  */
 public class Part2 {
 
 	public static void main(String[] args) {
 		Part2 part2 = new Part2();
 		// part2.computeAndPrintPrimesEfficiently(1000000);
-		part2.computeAndPrintPrimesFirstApproach(1000000);
+		// part2.computeAndPrintPrimesFirstApproach(1000000);
+		part2.computeAndPrintPrimesEfficiently(Integer.MAX_VALUE);
+		part2.computeAndPrintPrimesEfficiently(Long.MAX_VALUE);
+		// part2.computeAndPrintPrimesFirstApproach(Integer.MAX_VALUE);
 
 	}
 
-	public void computeAndPrintPrimesEfficiently(int upperBound) {
+	public void computeAndPrintPrimesEfficiently(long maxValue) {
 		long startTime = System.currentTimeMillis();
-		List<Integer> primes = computePrimesEfficiently(upperBound);
+		List<Long> primes = computePrimesEfficiently(maxValue);
 		long endTime = System.currentTimeMillis();
 		long timeTaken = endTime - startTime;
 		printOutPrimesAndTimeTaken(primes, timeTaken);
@@ -29,33 +32,32 @@ public class Part2 {
 	/**
 	 * Computes all primes up to MAX_INTEGER using the first approach.
 	 */
-	public void computeAndPrintPrimesFirstApproach(int upperBound) {
+	public void computeAndPrintPrimesFirstApproach(long upperBound) {
 		long startTime = System.currentTimeMillis();
-		List<Integer> primeNumbers = computePrimeNumbersFirstApproach(upperBound);
+		List<Long> primeNumbers = computePrimeNumbersFirstApproach(upperBound);
 		long endTime = System.currentTimeMillis();
 		long timeTaken = endTime - startTime;
 		printOutPrimesAndTimeTaken(primeNumbers, timeTaken);
 	}
 
-	private void printOutPrimesAndTimeTaken(List<Integer> primeNumbers,
-			long timeTaken) {
-		for (Integer prime : primeNumbers) {
-			// System.out.println(prime);
+	private void printOutPrimesAndTimeTaken(List<Long> primes, long timeTaken) {
+		for (long prime : primes) {
+			System.out.println(prime);
 		}
-		System.out.println(primeNumbers.size() + " primes found");
+		System.out.println(primes.size() + " primes found");
 		System.out.println("Time taken for computation: " + timeTaken + "ms");
 	}
 
 	/**
 	 * Computes all primes between 0 and a given max.
 	 * 
-	 * @param maxPrime
-	 *            The maximum prime value to be found.
+	 * @param upperBound
+	 *          The maximum prime value to be found.
 	 * @return A {@link List} of primes found.
 	 */
-	public List<Integer> computePrimeNumbersFirstApproach(int maxPrime) {
-		LinkedList<Integer> primes = new LinkedList<Integer>();
-		for (int i = 2; i <= maxPrime; i++) {
+	public List<Long> computePrimeNumbersFirstApproach(long upperBound) {
+		LinkedList<Long> primes = new LinkedList<Long>();
+		for (long i = 2; i <= upperBound; i++) {
 			if (isPrime(i)) {
 				primes.add(i);
 			}
@@ -67,10 +69,10 @@ public class Part2 {
 	 * Checks if an integer is prime.
 	 * 
 	 * @param possiblePrime
-	 *            The integer to be checked.
+	 *          The integer to be checked.
 	 * @return <code>true</code> if integer is prime.
 	 */
-	public boolean isPrime(int possiblePrime) {
+	public boolean isPrime(long possiblePrime) {
 		double maxDivisor = Math.sqrt(possiblePrime);
 		if (possiblePrime < 2) {
 			return false;
@@ -88,14 +90,18 @@ public class Part2 {
 	 * factors.
 	 * 
 	 * @param possibleProduct
-	 *            The number to check.
-	 * @param factors
-	 *            List of possible factors.
+	 *          The number to check.
+	 * @param result
+	 *          List of possible factors.
 	 * @return
 	 */
-	public boolean isProductOfAnyOfGivenFactors(int possibleProduct,
-			List<Integer> factors) {
-		for (int factor : factors) {
+	public boolean isProductOfAnyOfGivenFactors(long possibleProduct,
+	    List<Long> result) {
+		double maxFactor = Math.sqrt(possibleProduct);
+		for (long factor : result) {
+			if (factor > maxFactor) {
+				return true;
+			}
 			if (possibleProduct % factor == 0) {
 				return false;
 			}
@@ -103,10 +109,10 @@ public class Part2 {
 		return true;
 	}
 
-	private List<Integer> computePrimesUpToBoundEfficiently(int upperBound,
-			List<Integer> formerPrimes) {
-		List<Integer> result = new LinkedList<Integer>(formerPrimes);
-		for (int i = 2; i <= upperBound; i++) {
+	private List<Long> computePrimesUpToBoundEfficiently(long maxValue,
+	    List<Long> formerPrimes) {
+		List<Long> result = new LinkedList<Long>(formerPrimes);
+		for (long i = 2; i <= maxValue; i++) {
 			if (isProductOfAnyOfGivenFactors(i, result)) {
 				result.add(i);
 			}
@@ -117,13 +123,12 @@ public class Part2 {
 	/**
 	 * Computes all primes up to a given border.
 	 * 
-	 * @param upperBorder
-	 *            The maximum number to check for prime.
+	 * @param maxValue
+	 *          The maximum number to check for prime.
 	 * @return A @{List} of all the primes found.
 	 */
-	public List<Integer> computePrimesEfficiently(int upperBorder) {
-		return computePrimesUpToBoundEfficiently(upperBorder,
-				new LinkedList<Integer>());
+	public List<Long> computePrimesEfficiently(long maxValue) {
+		return computePrimesUpToBoundEfficiently(maxValue, new LinkedList<Long>());
 	}
 
 }

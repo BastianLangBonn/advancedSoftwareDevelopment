@@ -13,7 +13,7 @@ import org.junit.Test;
  * Unit test for Part2.
  * 
  * @author bastian
- *
+ * 
  */
 public class Part2Test {
 
@@ -26,25 +26,23 @@ public class Part2Test {
 
 	@Test
 	public void computePrimeNumbersEfficiently_2_return2() {
-		// Arrange
-		List<Integer> formerPrimes = Arrays.asList();
 		// Act
-		List<Integer> primes = subject.computePrimesEfficiently(2);
+		List<Long> primes = subject.computePrimesEfficiently(2);
 		// Arrange
 		assertEquals(primes.size(), 1);
-		assertTrue(primes.contains(2));
+		assertTrue(primes.contains(2l));
 	}
 
 	@Test
 	public void computePrimeNumbers_inputTen_return2and3() {
 		// Act
-		List<Integer> primes = subject.computePrimeNumbersFirstApproach(10);
+		List<Long> primes = subject.computePrimeNumbersFirstApproach(10);
 		// Assert
 		assertEquals("Number of found primes not correct.", 4, primes.size());
-		assertTrue(primes.contains(2));
-		assertTrue(primes.contains(3));
-		assertTrue(primes.contains(5));
-		assertTrue(primes.contains(7));
+		assertTrue(primes.contains(2l));
+		assertTrue(primes.contains(3l));
+		assertTrue(primes.contains(5l));
+		assertTrue(primes.contains(7l));
 	}
 
 	@Test
@@ -67,7 +65,7 @@ public class Part2Test {
 		testForPrime(4, false);
 	}
 
-	private void testForPrime(int possiblePrime, boolean expectation) {
+	private void testForPrime(long possiblePrime, boolean expectation) {
 		// Arrange
 		Part2 subject = new Part2();
 		// Act
@@ -78,21 +76,21 @@ public class Part2Test {
 
 	@Test
 	public void isPrimeGivenFormerPrimes_10_returnsFalse() {
-		List<Integer> formerPrimes = Arrays.asList(2, 3);
+		List<Long> formerPrimes = Arrays.asList(2l, 3l);
 		testForPrimeUsingFormerPrimes(10, formerPrimes, false);
 	}
 
 	@Test
 	public void isPrimeGivenFormerPrimes_7_returnsTrue() {
-		List<Integer> formerPrimes = Arrays.asList(2, 3);
+		List<Long> formerPrimes = Arrays.asList(2l, 3l);
 		testForPrimeUsingFormerPrimes(7, formerPrimes, true);
 	}
 
-	private void testForPrimeUsingFormerPrimes(int possiblePrime,
-			List<Integer> formerPrimes, boolean expectation) {
+	private void testForPrimeUsingFormerPrimes(long possiblePrime,
+	    List<Long> formerPrimes, boolean expectation) {
 		// Act
 		boolean prime = subject.isProductOfAnyOfGivenFactors(possiblePrime,
-				formerPrimes);
+		    formerPrimes);
 		// Assert
 		assertEquals(expectation, prime);
 	}
