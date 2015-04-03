@@ -13,14 +13,27 @@ public class Part2 {
 
 	public static void main(String[] args) {
 		Part2 part2 = new Part2();
-		// part2.computeAndPrintPrimesEfficiently(1000000);
-		// part2.computeAndPrintPrimesFirstApproach(1000000);
-		part2.computeAndPrintPrimesEfficiently(Integer.MAX_VALUE);
-		part2.computeAndPrintPrimesEfficiently(Long.MAX_VALUE);
-		// part2.computeAndPrintPrimesFirstApproach(Integer.MAX_VALUE);
-
+		part2.computeAndPrintPrimesEfficiently(1000000);
+		part2.computeAndPrintPrimesFirstApproach(1000000);
+		part2.countAllIntegers();
 	}
 
+	public void countAllIntegers() {
+		long startTime = System.currentTimeMillis();
+		for (int i = Integer.MIN_VALUE; i <= Integer.MAX_VALUE; i++) {
+			//
+		}
+		long endTime = System.currentTimeMillis();
+		long timeTaken = endTime - startTime;
+		System.out.println("Counting all integers took " + timeTaken + "ms to do.");
+	}
+
+	/**
+	 * Computes and prints primes checking only primes up to the square root for a
+	 * given possible prime.
+	 * 
+	 * @param maxValue
+	 */
 	public void computeAndPrintPrimesEfficiently(long maxValue) {
 		long startTime = System.currentTimeMillis();
 		List<Long> primes = computePrimesEfficiently(maxValue);
