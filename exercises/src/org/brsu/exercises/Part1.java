@@ -122,8 +122,8 @@ public class Part1 {
 			product *= factor;
 		}
 		if (product > Integer.MAX_VALUE || product < Integer.MIN_VALUE) {
-			throw new IllegalStateException("Value cannot be displayed as integer: "
-			    + product);
+			throw new IllegalStateException(
+			    "Computation of product has exceeded integer range.\n");
 		}
 		if (product > 0) {
 			return (int) product;
@@ -133,7 +133,7 @@ public class Part1 {
 			return 0;
 		}
 		throw new IllegalStateException(
-		    "Computation of product has exceeded integer range.");
+		    "Computation of product has exceeded integer range.\n");
 	}
 
 	/**
