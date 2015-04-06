@@ -2,7 +2,6 @@ package org.brsu.exercises;
 
 import java.util.Arrays;
 import java.util.InputMismatchException;
-import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -13,8 +12,7 @@ import java.util.Scanner;
  */
 public class Part1 {
 
-	private static final int MAX_RANDOM_INTEGER = 100;
-	private Random random;
+	private Scanner scanner;
 
 	public static void main(String[] args) {
 		Part1 part1 = new Part1();
@@ -22,7 +20,7 @@ public class Part1 {
 	}
 
 	public Part1() {
-		random = new Random();
+		scanner = new Scanner(System.in);
 	}
 
 	/**
@@ -30,25 +28,61 @@ public class Part1 {
 	 * exercise 1.
 	 */
 	public void run() {
-		int userInput = getUserInput();
-		int[] randomNumbers = readNIntegers(userInput);
-		for (int i = 0; i < randomNumbers.length; i++) {
-			System.out.println("random number " + (i + 1) + ": " + randomNumbers[i]);
-		}
-		System.out.println("sum: " + computeSumOfArray(randomNumbers));
+		int[] input = getUserInput();
+		computeAndPrintInformationForNumbers(input);
+	}
+
+	private void computeAndPrintInformationForNumbers(int[] numbersGiven) {
+		int sum = computeSumOfArray(numbersGiven);
+		int average = (int) computeAverageOfArray(numbersGiven);
+		int variance = (int) computeVarianceOfArray(numbersGiven);
+		Arrays.sort(numbersGiven);
+		int maximum = numbersGiven[numbersGiven.length - 1];
+		int minimum = numbersGiven[0];
+		String numbers = createNumbersString(numbersGiven);
+		System.out.println(numbers);
+		System.out.println("sum: " + sum);
 		try {
-			System.out.println("product: " + computeProductOfArray(randomNumbers));
+			int product = computeProductOfArray(numbersGiven);
+			System.out.println("product: " + product);
 		} catch (IllegalStateException exception) {
 			System.err.println(exception.getMessage());
 		}
-		System.out
-		    .println("average: " + (int) computeAverageOfArray(randomNumbers));
-		System.out.println("variance: "
-		    + (int) computeVarianceOfArray(randomNumbers));
-		Arrays.sort(randomNumbers);
-		System.out.println("maximum value: "
-		    + randomNumbers[randomNumbers.length - 1]);
-		System.out.println("minimum value: " + randomNumbers[0]);
+		System.out.println("average: " + average);
+		System.out.println("variance: " + variance);
+		System.out.println("minimum value: " + minimum);
+		System.out.println("maximum value: " + maximum);
+	}
+
+	private String createNumbersString(int[] numbersGiven) {
+		StringBuilder numbers = new StringBuilder();
+		numbers.append("User given numbers: {");
+		for (int i = 0; i < numbersGiven.length; i++) {
+			numbers.append(numbersGiven[i]);
+			if (i < (numbersGiven.length - 1)) {
+				numbers.append(", ");
+			}
+		}
+		numbers.append("}");
+		return numbers.toString();
+	}
+
+	private int[] getUserInput() {
+		try {
+			int userInput = getIntegerFromUser("Please input an integer n ([0,100]) specifying how many numbers you want to type in.");
+			return readNIntegers(userInput);
+		} finally {
+			scanner.close();
+		}
+	}
+
+	private int[] readNIntegers(int numberOfIntegersToRead) {
+		int[] result = new int[numberOfIntegersToRead];
+		for (int i = 0; i < numberOfIntegersToRead; i++) {
+			result[i] = getIntegerFromUser("Please input an integer of range [0,100]");
+			System.out.println((numberOfIntegersToRead - (i + 1)) + " numbers left.");
+		}
+		return result;
 	}
 
 	/**
@@ -57,9 +91,8 @@ public class Part1 {
 	 * 
 	 * @return The given user input.
 	 */
-	public int getUserInput() {
-		System.out.println("Please input an integer n");
-		Scanner scanner = new Scanner(System.in);
+	public int getIntegerFromUser(String displayMessage) {
+		System.out.println(displayMessage);
 		int input = 0;
 		try {
 			input = scanner.nextInt();
@@ -68,27 +101,10 @@ public class Part1 {
 			}
 		} catch (InputMismatchException exception) {
 			System.out.println("Input has to be an integer in range [0,100]");
-			return getUserInput();
-		} finally {
-			scanner.close();
+			return getIntegerFromUser(displayMessage);
 		}
 		System.out.println("Input given was " + input);
 		return input;
-	}
-
-	/**
-	 * Creates n random integers.
-	 * 
-	 * @param n
-	 *          Number of integers to be created.
-	 * @return An array of integers.
-	 */
-	public int[] readNIntegers(int n) {
-		int[] result = new int[n];
-		for (int i = 0; i < n; i++) {
-			result[i] = random.nextInt(MAX_RANDOM_INTEGER);
-		}
-		return result;
 	}
 
 	/**
