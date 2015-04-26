@@ -1,0 +1,131 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref}
+
+
+% To Do:
+% \listoffigures \listoftables
+% \setcounter{secnumdepth}{0}
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\textbf{JAVA Cheat Sheet 3}} \\
+\end{center}
+
+\section{Basic OO}
+
+\subsection{Reference types}
+In JAVA only primitive types are handled \textbf{by value}, because their representation does have a fixed size.\\
+All other objects are handled \textbf{by reference}.\\
+Thus \textbf{only} their \textbf{references are passed}, not their values $\rightarrow$ Operations on variables storing references will affect other variables holding the same reference.
+
+\subsection{Objects, classes, instances}
+Every JAVA program is a set of \textbf{classes}.\\
+Every piece of code has to be part of a class.\\
+A class is the \textbf{concept} or \textbf{blueprint} of an object.\\
+Classes can be \textbf{instantiated}, creating a concrete object from those blueprints - an \textbf{instance}.\\
+Every class is inherited of the class \textbf{Object}.
+
+\subsection{Attributes (fields, members)}
+A class can have several \textbf{attributes} describing it. Those attributes are typically declared at the top of the class and their scope is the whole class. They are called \textbf{fields} or \textbf{members}.
+
+\section{Advanced OO}
+
+\subsection{Modifiers (class, attribute, method)}
+\subsubsection{Visibility}
+\begin{itemize}
+\item public $\rightarrow$ Accessible from everywhere
+\item private $\rightarrow$ Accessible only from within this class
+\item protected $\rightarrow$ Accessible from this class, all sub classes and all classes in the same package.
+\item package private (no keyword) $\rightarrow$ Accessible from this class and all classes in the same package
+\end{itemize}
+\subsubsection{static}
+Can be accessed without having an instance of the class.\\
+Holds for every instance.\\
+\subsubsection{final}
+Final \textbf{classes} may \textbf{not be subclassed}.\\
+Final \textbf{methods} \textbf{cannot be overridden} by subclasses.\\
+Final \textbf{attributes} \textbf{cannot change their values} once initialized.
+
+\subsection{Constructors, initializers, memory allocation}
+
+\subsection{Destructors, garbage collection}
+
+\subsection{Inheritance}
+
+\subsection{Polymorphism}
+
+\subsection{Local, inner, anonymous classes}
+
+\subsection{Modularization, packages, archives}
+
+
+
+
+
+
+
+\end{multicols}
+\end{document}
