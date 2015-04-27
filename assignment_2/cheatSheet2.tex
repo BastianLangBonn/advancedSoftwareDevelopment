@@ -1,0 +1,186 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{color,graphicx,overpic}
+\usepackage{hyperref}
+\usepackage[]{algorithm}
+\usepackage[noend]{algpseudocode}
+
+
+\pdfinfo{
+  /Title (example.pdf)
+  /Creator (TeX)
+  /Producer (pdfTeX 1.40.0)
+  /Author (Seamus)
+  /Subject (Example)
+  /Keywords (pdflatex, latex,pdftex,tex)}
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+    {\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+        {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+        {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+    }
+
+% Turn off header and footer
+\pagestyle{empty}
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+%My Environments
+\newtheorem{example}[section]{Example}
+% -----------------------------------------------------------------------
+
+\begin{document}
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\underline{Cheat Sheet \#2}} \\
+\end{center}
+
+\section{Constants, Variables, Parameters, Scoping}
+\subsection{Constants}
+Constants are declared \textbf{static final} to make them accessible without having to have an instance of that object and to make it immutable. The name is capitalized and words separated by underscores by convention.\\
+\emph{public static String HELLO\textunderscore WORLD = "Hello World!";}
+
+\subsection{Variables}
+Variables have to be \textbf{declared} and \textbf{initialized} before usage. Each variable has a \textbf{type} and a \textbf{name}. If there is no explicit initialization, primitive variables get initialized with default values (0 or \emph{false}), otherwise with \emph{null}. One can declare and initialize variables in one step:\\
+\emph{int i = 12;}
+
+\subsection{Parameters}
+Each method takes 0 to n parameters. Those parameters are objects passed from outside of the method on the call. Those objects can be used inside of the method.\\
+Primitive types are mostly passed \textbf{by value}, more complex types are usually passed \textbf{by reference}. This means changing values and fields of the reference passed changes those values outside of the method for this object as well. The reference actually is the representation of an object in storage.
+
+\subsection{Scoping}
+Each object only exist within a specified scope. A variable that has been declared inside a method (\textbf{local variable}) is only known inside of this method and cannot be accessed by methods outside of this method.\\
+A variable declared in the body of a class (\textbf{class variable}) is known to all the class' methods. It is unique for each object created of this class.\\
+If the variable is static, it only exists once for a class, but it can be accessed without having to instantiate an object of this class. It is known everywhere where the class itself is known.
+
+\section{Primitive Data Types}
+There are eight primitive data types in java:
+\begin{itemize}
+\item \textbf{byte} - 8-bit signed two's complement integer, [-128,127].
+\item \textbf{short} - 16-bit signed two's complement integer, [-32768,32767]. 
+\item int 32-bit signed two's complement integer, [$-2^{31}, 2^{31}-1$].
+\item \textbf{long} - 64-bit two's complement integer, [$-2^{63}, 2^{63}-1$].
+\item float - 32-bit IEEE 754 floating point
+\item double - 64-bit IEEE 754 floating point.
+\item char - single 16-bit Unicode character, [$\backslash u0000, \backslash uffff$].
+\item boolean - {true, false}
+\end{itemize}
+\textbf{String} is technically no primitive data structure.
+
+\section{Arithmetic expressions, math}
+There are some basic arithmetic operations available for numerical types in java. Those include:
+\begin{itemize}
+\item addition (a + b)
+\item subtraction (a - b)
+\item multiplication (a * b)
+\item division (a / b)
+\item modulo/remainder (a \% b)
+\item pre/post increment (++a / a++)
+\item pre/post decrement (--a / a--)
+\end{itemize}
+
+For more advanced operations the \textbf{Math}-library provides many operations like computing the square root, the power, sin and cos of numbers and so on. 
+
+\section{Type Conversion}
+To convert one type into another one there is the possibility of casting. This will work only if the types are compatible. One may loose some precision for numerical types.\\
+\emph{int i = (int)5.5;}\\
+For known types java does the type conversion implicitly, e.g. printing the value of an integer.\\
+\emph{int i = 7; System.out.println("i:" + i);}\\
+There are some methods in the Wrapper classes of the primitive types that provide conversion from other primitive types, like Integer.parseInt(...) to convert from String to int.
+
+\section{Logical Expressions}
+\begin{itemize}
+\item \textbf{AND} - a \& b or a \&\& b (lazy evaluation)
+\item \textbf{OR} - a $\vert$ b or a $\vert\vert$ b (lazy evaluation)
+\item \textbf{XOR} - a \^{ } b
+\item \textbf{NOT} - !a
+\end{itemize}
+
+
+\section{Operators, operator precedence}
+Besides the arithmetic operators, there are also logical bitwise operators (\& - AND, $\vert$ - OR, \^{ } - XOR, \~{ } - (Inversion)), operators to assign values (\& =, $\vert$=, \^{ }=, $<< =, >> =, >>>=$) and also the shift operators ($<<, >>, >>>$).\\
+\textbf{Precedence} From highest to lowest:\\
+$[]$,(),.,++,--,+ (unary), -(unary),\~{ }, !, (type), new, *, /, \%, \&, +, -, + (string concatenation), $<<, >>, >>>, <, <=, >, >=$, instanceof, ==, !=, \&\&, \^{ }, $\vert$, , $\vert\vert$  
+
+
+\section{Characters and Strings}
+Basically \textbf{char} is a primitive type referring to one single character. \textbf{String} is a class referring to 0 to n characters.\\
+A string is \textbf{immutable}, so every time a new value is assigned to a String, a new String object is created and stored.
+
+\section{String expressions}
+There are many useful functions for the handling of Strings in JAVA, most of them located in the \textbf{String} class.\\
+To concatenate Strings: \emph{StringA + StringB;}\\
+To get length of String: \emph{StringA.lengt();}\\
+To check if a String contains another string: \emph{StringA.contains(StringB);}\\
+To use variable values inside of a String: \emph{String.format("Some integer: \%d, some String: \%s, some floeat: \%.2f", integer, string, floatingNumber);}
+
+\section{Basic I/O}
+For basic input one can use the \textbf{Scanner} class of java.\\
+\emph{Scanner scanner = new Scanner(System.in);\\scanner.nextInt();}\\
+For basic output one can use the \textbf{System.out} class:\\
+\emph{System.out.println("Hello World");}
+
+\section{Exceptions and exception handling}
+In JAVA code may throw exceptions. These exceptions will stop the execution of the code if not handled. To handle exceptions one can either declare the method to \textbf{throw} this exception - the exception will then have to be handled elsewhere - or use a \textbf{try-catch}-block to define alternative behavior.\\
+There are \textbf{checked} and \textbf{unchecked} exceptions in JAVA. Unchecked exceptions are not checked at compile-time, only on runtime. Checked exceptions will already be checked during compilation.
+
+
+\section{Sources}
+https://docs.oracle.com/javase/tutorial/java/\\nutsandbolts/datatypes.html\\
+http://en.wikibooks.org/wiki/Java\textunderscore Programming\\/Arithmetic\textunderscore expressions\\
+http://bmanolov.free.fr/javaoperators.php\\
+http://beginnersbook.com/2013/04/java-checked-unchecked-exceptions-with-examples/\\
+
+
+% You can even have references
+\rule{0.3\linewidth}{0.25pt}
+\scriptsize
+\bibliographystyle{abstract}
+\bibliography{refFile}
+\end{multicols}
+\end{document}
