@@ -4,6 +4,7 @@
 \usepackage{ifthen}
 \usepackage[landscape]{geometry}
 \usepackage{hyperref}
+\usepackage{cite}
 
 
 % To Do:
@@ -96,9 +97,9 @@ A class can have several \textbf{attributes} describing it. Those attributes are
 \subsection{Modifiers (class, attribute, method)}
 \subsubsection{Visibility}
 \begin{itemize}
-\item public $\rightarrow$ Accessible from everywhere
-\item private $\rightarrow$ Accessible only from within this class
-\item protected $\rightarrow$ Accessible from this class, all sub classes and all classes in the same package.
+\item \textbf{public} $\rightarrow$ Accessible from everywhere
+\item \textbf{private} $\rightarrow$ Accessible only from within this class
+\item \textbf{protected} $\rightarrow$ Accessible from this class, all sub classes and all classes in the same package.
 \item package private (no keyword) $\rightarrow$ Accessible from this class and all classes in the same package
 \end{itemize}
 \subsubsection{static}
@@ -110,21 +111,83 @@ Final \textbf{methods} \textbf{cannot be overridden} by subclasses.\\
 Final \textbf{attributes} \textbf{cannot change their values} once initialized.
 
 \subsection{Constructors, initializers, memory allocation}
+\subsubsection{Constructors}
+Methods called when \textbf{initializing} an Object.\\
+Do not specify a return value.\\
+Name has to equal the class' name.\\
+Every object provides a \textbf{default constructor}.\\
+Usually used to initialize fields with user given values.\\
+
+\subsubsection{Initializers}
+Code that \textbf{does not belong to any method} inside of a class.\\
+Declaring (and initializing) fields is a common usage.\\
+Will be executed in order of appearance.
+\footnote{see http://www.dummies.com/how-to/content/what-is-an-initializer-in-java.html}\\
+
+\subsubsection{Memory Allocation}
+JAVA objects reside in the \textbf{heap}.\\
+The \emph{heap} is divided into \textbf{young space} and \textbf{old space}.\\
+The \textbf{JVM} distinguishes between \textbf{small} and \textbf{large objects}.\\
+\emph{Small objects} get allocated in \textbf{thread local areas (TLAs)} of the \emph{heap}.\\
+\emph{Large objects} are allocated in the \emph{old space}.\footnote{see https://docs.oracle.com/cd/E13150\textunderscore 01/jrockit\textunderscore jvm/jrockit/geninfo/diagnos/garbage\textunderscore collect.html}\\
 
 \subsection{Destructors, garbage collection}
 
+\subsubsection{Destructors}
+In JAVA there are no destructors. Destroying objects is \textbf{done by the garbage collector}, but there is no exact telling when this will be done.
+
+\subsubsection{Garbage Collection}
+\footnote{see https://docs.oracle.com/cd/E13150\textunderscore 01/jrockit\textunderscore jvm/jrockit/geninfo/diagnos/garbage\textunderscore collect.html}
+\textbf{Garbage collection} is the process of freeing space in the \emph{young space} for the allocation of new objects.\\
+The \emph{JVM} uses \textbf{mark and sweep} for garbage collection on the \textbf{whole heap}.\\
+It \textbf{marks} all objects as \emph{alive} that are \"reachable\" from threads, native handles and other root sources and also those objects reachable from \emph{alive} objects. The rest is considered garbage.\\
+It then identifies the free space between the \emph{alive} objects. This is called \textbf{sweeping}.\\
+Garbage collection on the \textbf{young space} is called \textbf{young collection}.\\
+The \textbf{young collector} promotes all live objects outside a so called \textbf{keep area} to the \textbf{old space}.\\
+A garbage collection strategy using a \emph{young space} is called \textbf{generational garbage collection strategy}.\\
+There are several \textbf{garbage collection modes}:\\
+\textbf{dynamic modes:}
+\begin{itemize}
+\item throughput $\rightarrow$ maximum application throughput
+\item pausetime $\rightarrow$ short and even pause times
+\item determinicstic $\rightarrow$ very short and deterministic pause times
+\end{itemize}
+\textbf{static modes:}
+\begin{itemize}
+\item singlepar $\rightarrow$ single-generational parallel garbage collector
+\item genpar $\rightarrow$ two-generational parallel garbage collector
+\item singlecon $\rightarrow$ single-generational mostly concurrent garbage collector
+\item gencon $\rightarrow$ two-generational mostly concurrent garbage collector
+\end{itemize}
+\textbf{Compaction} is used to \textbf{get rid of small chunks of space} in the heap and to instead \textbf{create bigger chunks} by moving objects in the heap closer together.
+
 \subsection{Inheritance}
+In JAVA except for the class \emph{Object} every class has exactly one \textbf{superclass}.\\
+A \textbf{subclass} inherits fields and methods from its superclass.\\
+Eventually, every class inherits from the class \emph{Object}.\\
+To subclass another class use keyword \textbf{extends}.\\
+\emph{public class Audi \textbf{extends} Car\{...\}}
 
 \subsection{Polymorphism}
+In JAVA every class is also an instance of its superclass.\\
+As for this holds also for the superclass, every class in JAVA may be an instance of many different classes.\\
+Eventually every class is an instance of \emph{Object}.\\
+\textbf{possible:}\\
+\emph{Car car = new Audi();} $\leftarrow$ if Audi extends Car.\\
+But now only functionality of type Car is accessible, even if the assigned type is an Audi. 
 
 \subsection{Local, inner, anonymous classes}
+An \textbf{inner class} is a class defined within another class. So the inner class can only be accessed from an instance of the outer class.\\
+A \textbf{locale class} is a class that is defined in a block of another class, typically a method.\\
+A local class can only be used within the block where it is declared - it has \textbf{local scope}.\\
+\emph{OuterClass.InnerClass innerObject = outerObject.new InnerClass();}
+\footnote{see https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html}\\
+An \textbf{anonymous class} is a class that is declared and instantiated at the same time.\\
+\emph{Car car = new Audi()\{...$<$class definition here$>$...\}}
 
 \subsection{Modularization, packages, archives}
-
-
-
-
-
+\textbf{Packages} and \textbf{archives} are ways to \textbf{modularize code}. Packages have a hierarchical \textbf{tree-like structure} and function as folders for code.\\
+\textbf{JAVA archive files (JARs)} are archives containing packages and their contained classes.
 
 
 \end{multicols}
