@@ -1,4 +1,4 @@
-package org.brsu.exercises;
+package org.brsu.exercise1;
 
 /**
  * Class to store the results computed in {@link Part3} and provide a decent

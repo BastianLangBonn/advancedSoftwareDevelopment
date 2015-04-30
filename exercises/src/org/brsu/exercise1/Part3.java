@@ -1,4 +1,4 @@
-package org.brsu.exercises;
+package org.brsu.exercise1;
 
 /**
  * Class containing the code to solve part 3 of exercise 1.

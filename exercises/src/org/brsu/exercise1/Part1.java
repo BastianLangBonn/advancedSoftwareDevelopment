@@ -1,4 +1,4 @@
-package org.brsu.exercises;
+package org.brsu.exercise1;
 
 import java.util.Arrays;
 import java.util.InputMismatchException;
