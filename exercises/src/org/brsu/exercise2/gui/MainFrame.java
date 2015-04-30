@@ -10,6 +10,8 @@ import javax.swing.JFrame;
  */
 public class MainFrame extends JFrame {
 
+	private static final String TITLE = "Exercise 2 - The Color Tester";
+
 	private static final long serialVersionUID = 1L;
 
 	private MainPanel mainPanel;
@@ -25,6 +27,6 @@ public class MainFrame extends JFrame {
 		mainPanel.setVisible(true);
 		mainPanel.setOpaque(true);
 		mainPanel.validate();
-		setTitle("Exercise 2 - The Color Tester");
+		setTitle(TITLE);
 	}
 }
