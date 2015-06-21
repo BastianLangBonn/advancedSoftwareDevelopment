@@ -21,7 +21,7 @@ public class MainPanel2D extends JPanel {
 
 	public MainPanel2D(Set<Sample2D> samples) {
 		this.samples = samples;
-		setPreferredSize(new Dimension(800, 600));
+		setPreferredSize(new Dimension(500, 500));
 	}
 
 	@Override

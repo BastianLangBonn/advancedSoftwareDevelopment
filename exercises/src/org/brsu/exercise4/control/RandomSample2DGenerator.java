@@ -5,22 +5,10 @@ import java.util.Random;
 import java.util.Set;
 
 import org.brsu.exercise4.model.Sample2D;
+import org.brsu.exercise4.model.SamplingConstants;
 
 public class RandomSample2DGenerator {
 
-	private static final double X_MIN = -200.0;
-	private static final double X_MAX = 200.0;
-	private static final double Y_MIN = -200.0;
-	private static final double Y_MAX = 200.0;
-	private static final double THETA_MIN = 0.0;
-	private static final double THETA_MAX = 360.0;
-	private static final double WEIGHT_MIN = 0.0;
-	private static final double WEIGHT_MAX = 1.0;
-	private static final double CLAMP_PRECISION = 0.001;
-
-	private static final double SIGMA_X = 20.0;
-	private static final double SIGMA_Y = 20.0;
-	private static final double SIGMA_THETA = 10.0;
 	private Random random;
 
 	public RandomSample2DGenerator() {
@@ -35,13 +23,63 @@ public class RandomSample2DGenerator {
 	 * @return
 	 */
 	public Sample2D generateUniformlyDistributedSample(double weight) {
-		weight = clampValueWithinBounds(weight, WEIGHT_MIN, WEIGHT_MAX);
-		double x = getNewRandomWithinBounds(X_MIN, X_MAX);
-		double y = getNewRandomWithinBounds(Y_MIN, Y_MAX);
-		double theta = getNewRandomWithinBounds(THETA_MIN, THETA_MAX);
+		weight = clampValueWithinBounds(weight, SamplingConstants.WEIGHT_MIN, SamplingConstants.WEIGHT_MAX);
+		double x = getNewRandomWithinBounds(SamplingConstants.X_MIN, SamplingConstants.X_MAX);
+		double y = getNewRandomWithinBounds(SamplingConstants.Y_MIN, SamplingConstants.Y_MAX);
+		double theta = getNewRandomWithinBounds(SamplingConstants.THETA_MIN, SamplingConstants.THETA_MAX
+		    - SamplingConstants.CLAMP_PRECISION);
 		return new Sample2D(x, y, theta, weight);
 	}
 
+	/**
+	 * Creates a new {@link Sample2D} out of an overlay of multiple gaussians.
+	 * 
+	 * @param xMeans
+	 * @param yMeans
+	 * @param thetaMeans
+	 * @param weight
+	 * @return
+	 */
+	public Sample2D generateSampleAroundDistributions(double weight) {
+		int numberOfDistributions = SamplingConstants.X_MEANS.length;
+		int distributionIndex = random.nextInt(numberOfDistributions);
+		double x = (random.nextGaussian() * SamplingConstants.SIGMA_X) + SamplingConstants.X_MEANS[distributionIndex];
+		double y = (random.nextGaussian() * SamplingConstants.SIGMA_Y) + SamplingConstants.Y_MEANS[distributionIndex];
+		double theta = (random.nextGaussian() * SamplingConstants.SIGMA_THETA)
+		    + SamplingConstants.THETA_MEANS[distributionIndex];
+
+		x = clampValueWithinBounds(x, SamplingConstants.X_MIN, SamplingConstants.X_MAX);
+		y = clampValueWithinBounds(y, SamplingConstants.Y_MIN, SamplingConstants.Y_MAX);
+		theta = clampValueWithinBounds(theta, SamplingConstants.THETA_MIN, SamplingConstants.THETA_MAX);
+
+		return new Sample2D(x, y, theta, weight);
+	}
+
+	/**
+	 * Creates a set of {@link Sample2D} around an overlay of given distributions.
+	 * 
+	 * @param xMeans
+	 * @param yMeans
+	 * @param thetaMeans
+	 * @param numberOfSamples
+	 * @return
+	 */
+	public Set<Sample2D> generateSamplesAroundDistributions(int numberOfSamples) {
+		Set<Sample2D> result = new HashSet<Sample2D>(numberOfSamples);
+		double weight = 1.0 / numberOfSamples;
+		for (int i = 0; i < numberOfSamples; i++) {
+			result.add(generateSampleAroundDistributions(weight));
+		}
+		return result;
+	}
+
+	/**
+	 * Creates a set of {@link Sample2D} that is uniformly distributed within the
+	 * specified ranges.
+	 * 
+	 * @param numberOfSamples
+	 * @return
+	 */
 	public Set<Sample2D> generateUniformlyDistributedSamples(int numberOfSamples) {
 		Set<Sample2D> result = new HashSet<Sample2D>(numberOfSamples);
 		for (int i = 0; i < numberOfSamples; i++) {
@@ -62,6 +100,59 @@ public class RandomSample2DGenerator {
 			result = upperBound;
 		}
 		return result;
+	}
+
+	public Set<Sample2D> generateWeightedSet(Set<Sample2D> samples) {
+		Set<Sample2D> result = new HashSet<Sample2D>(samples.size());
+		Sample2D realPose = generateSampleAroundDistributions(0);
+		double realX = realPose.getX();
+		double realY = realPose.getY();
+		double realTheta = realPose.getTheta();
+
+		for (Sample2D sample : samples) {
+			double sampleX = sample.getX();
+			double sampleY = sample.getY();
+			double sampleTheta = sample.getTheta();
+
+			double xDensity = computeDensity(sampleX, realX, SamplingConstants.SIGMA_X);
+			double yDensity = computeDensity(sampleY, realY, SamplingConstants.SIGMA_Y);
+			double thetaDensity = computeDensity(sampleTheta, realTheta, SamplingConstants.SIGMA_THETA);
+			double weight = xDensity * yDensity * thetaDensity;
+			result.add(new Sample2D(sampleX, sampleY, sampleTheta, weight));
+		}
+		return result;
+	}
+
+	public Set<Sample2D> resampleSet(Set<Sample2D> samples) {
+		Set<Sample2D> result = new HashSet<Sample2D>(samples.size());
+
+		for (int i = 0; i < samples.size(); i++) {
+			double randomNumber = random.nextDouble();
+			// get index
+			double currentWeight = 0;
+			for (Sample2D sample : samples) {
+				currentWeight += sample.getWeight();
+				System.out.println(currentWeight);
+				if (randomNumber < currentWeight) {
+					double x = sample.getX();
+					double y = sample.getY();
+					double theta = sample.getTheta();
+					double weight = 1.0 / samples.size();
+
+					result.add(new Sample2D(x, y, theta, weight));
+					break;
+				}
+			}
+			// System.out.println(String.format("No match found for %f. Current weight: %f.",
+			// randomNumber, currentWeight));
+		}
+		return result;
+	}
+
+	private double computeDensity(double value, double mean, double sigma) {
+		double base = 1.0 / (Math.sqrt(2 * Math.PI * sigma * sigma));
+		double exponent = -Math.pow(value - mean, 2) / (2 * sigma * sigma);
+		return base * Math.exp(exponent);
 	}
 
 	public static void main(String[] args) {

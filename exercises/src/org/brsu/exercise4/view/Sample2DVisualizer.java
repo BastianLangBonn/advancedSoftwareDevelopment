@@ -3,7 +3,6 @@ package org.brsu.exercise4.view;
 import java.util.Set;
 
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 
 import org.brsu.exercise4.model.Sample2D;
 
@@ -19,11 +18,7 @@ public class Sample2DVisualizer extends JFrame {
 		setSize(500, 500);
 		mainPanel = new MainPanel2D(samples);
 		mainPanel.setVisible(true);
-		JScrollPane scrollPane = new JScrollPane(mainPanel);
-		scrollPane.getVerticalScrollBar().setMinimum(-200);
-		scrollPane.getHorizontalScrollBar().setMinimum(-200);
-		scrollPane.setVisible(true);
-		add(scrollPane);
+		add(mainPanel);
 		setTitle(title);
 		setVisible(true);
 	}
