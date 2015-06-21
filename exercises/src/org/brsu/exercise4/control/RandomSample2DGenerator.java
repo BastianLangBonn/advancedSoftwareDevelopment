@@ -132,7 +132,7 @@ public class RandomSample2DGenerator {
 			double currentWeight = 0;
 			for (Sample2D sample : samples) {
 				currentWeight += sample.getWeight();
-				System.out.println(currentWeight);
+				System.out.println();
 				if (randomNumber < currentWeight) {
 					double x = sample.getX();
 					double y = sample.getY();
