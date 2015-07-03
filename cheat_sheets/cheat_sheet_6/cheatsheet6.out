@@ -7,3 +7,6 @@
 \BOOKMARK [2][-]{section*.7}{Data Streams}{section*.1}% 7
 \BOOKMARK [2][-]{section*.8}{Object Streams}{section*.1}% 8
 \BOOKMARK [2][-]{section*.9}{File I/O With NIO}{section*.1}% 9
+\BOOKMARK [1][-]{section*.10}{GUIs}{}% 10
+\BOOKMARK [2][-]{section*.11}{Swing Components}{section*.10}% 11
+\BOOKMARK [2][-]{section*.12}{Event Handling}{section*.10}% 12

@@ -5,6 +5,7 @@
 \usepackage[landscape]{geometry}
 \usepackage{hyperref}
 \usepackage{cite}
+\usepackage{listings}
 
 
 % To Do:
@@ -72,7 +73,7 @@
 \setlength{\columnsep}{2pt}
 
 \begin{center}
-     \Large{\textbf{JAVA Cheat Sheet 6}} \\
+     \Large{\textbf{JAVA Cheat Sheet 6\\I/O and GUIs}} \\
 \end{center}
 
 \section{I/O}
@@ -80,53 +81,81 @@
 "A program uses an \textbf{input stream} to read data from a source."\\
 "A program uses an \textbf{output stream} to write data to a destination."  \textit{(docs.oracle.com)}\\
 \subsection{Byte Streams}
-In Java all stream types are built on \textbf{ByteStreams}.\\
-\textit{FileInputStream in = new FileInputStream(fileName);\\
-FileOutputStream out = new FileOutputStream(fileName);\\
-int c;\\
-while((c = in.read()) != -1)\{\\
-\hspace{2mm} out.write(c);\\
-\}\\}
+In Java all stream types are built upon \textbf{ByteStreams}.
+\begin{lstlisting}
+FileInputStream in 
+  = new FileInputStream(fileName);
+FileOutputStream out 
+  = new FileOutputStream(fileName);
+int c;
+while((c = in.read()) != -1){
+  out.write(c);
+}
+\end{lstlisting}
 \subsection{Character Streams}
 \textbf{FileReader} and \textbf{FileWriter} use \textit{FileInputStream} and \textit{FileOutputStream} internally.\\
-\textit{FileReader in = new FileReader(fileName);\\
-FileWriter out = new FileWriter(fileName);\\
-int c;\\
-while((c = in.read()) != -1)\{\\
-\hspace{2mm} out.write(c);\\
-\}\\}
+\begin{lstlisting}
+FileReader in = new FileReader(fileName);
+FileWriter out = new FileWriter(fileName);
+int c;
+while((c = in.read()) != -1){
+ out.write(c);
+}
+\end{lstlisting}
 Use ints to store last 16 bits instead of last 8 bits.\\
 
 \subsection{Line-Oriented I/O}
 \textit{BufferedReader.readLine()} uses line terminators to split the lines.\\
-\textit{BufferedReader in = new BufferedReader(new FileReader(fileName));\\
-PrintWriter out = new PrintWriter(new FileWriter(fileName));\\
-String line;\\
-while((line = in.readLine()) != null)\{\\
-\hspace{2mm} out.println(line);\\
-\}\\}
+\begin{lstlisting}
+BufferedReader in = 
+  new BufferedReader(new FileReader(fileName));
+PrintWriter out = 
+  new PrintWriter(new FileWriter(fileName));
+String line;
+while((line = in.readLine()) != null){
+ out.println(line);
+}
+\end{lstlisting}
 
 \subsection{Scanner}
-\textit{Scanner s = new Scanner(<Stream>);\\
-while(s.hasNext())\{\\
-\hspace{2mm} doSomething...\\
-\}}\\
-Using different delimiter with: \textit{s.useDelimiter(Regex);}\\
+\begin{lstlisting}
+Scanner s = new Scanner(<Stream>);
+while(s.hasNext()){
+ doSomething...
+}
+\end{lstlisting}
+Using different delimiter with: 
+\begin{lstlisting}
+s.useDelimiter(Regex);
+\end{lstlisting}
 
 \subsection{I/O From Command Line}
-\textit{InputStreamReader in = new InputStreamReader(System.in);}\\
+\begin{lstlisting}
+InputStreamReader in = 
+  new InputStreamReader(System.in);
+\end{lstlisting}
 Or use \textbf{Console}:\\
-\textit{Console c = System.console();}\\
+\begin{lstlisting}
+Console c = System.console();
+\end{lstlisting}
 Returns \textit{null} if not available.\\
 
 \subsection{Data Streams}
 Streams to read and write primitive data types.\\
-\textit{DataInputStream in = new DataInputStream(new FileInputStream(fileName));\\
-DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(fileName)));\\
-in.readDouble(); / out.writeDouble(someDouble);\\
-in.readInt(); / out.writeInt(someInt);\\
-in.readUTF(); / out.writeUTF(someString);\\
-}
+\begin{lstlisting}
+DataInputStream in = 
+  new DataInputStream(
+    new FileInputStream(fileName));
+    
+DataOutputStream out = 
+  new DataOutputStream(
+    new BufferedOutputStream(
+      new FileOutputStream(fileName)));
+      
+in.readDouble(); / out.writeDouble(someDouble);
+in.readInt(); / out.writeInt(someInt);
+in.readUTF(); / out.writeUTF(someString);
+\end{lstlisting}
 
 \subsection{Object Streams}
 Java objects can be written to files if they implement the \textbf{Serializable} marker interface.\\
@@ -136,13 +165,117 @@ Classes to use are \textbf{ObjectInputStream} and \textbf{ObjectOutputStream}.\\
 \subsection{File I/O With NIO}
 New since Java7.\\
 Class \textbf{Path} to represent a path.\\
-\textit{Path p = Paths.get("/tmp/foo");}\\
+\begin{lstlisting}
+Path p = Paths.get("/tmp/foo");
+\end{lstlisting}
 For releasing resources after use, use \textbf{try-with-resources}:\\
-\textit{try(BufferedWriter writer = Files.newBufferedWriter(file, charset));}\\
+\begin{lstlisting}
+try(BufferedWriter writer = 
+  Files.newBufferedWriter(file, charset));
+\end{lstlisting}
 For file handling use class \textbf{Files}.\\
-\textit{Files.write(Path, byte[], OpenOption...);}\\
+\begin{lstlisting}
+Files.write(Path, byte[], OpenOption...);
+\end{lstlisting}
 \textbf{OpenOptions}:\\
 \{WRITE, APPEND, TRUNCATE\textunderscore EXISTING, CREATE\textunderscore NEW, CREATE, DELETE\textunderscore ON\textunderscore CLOSE, SPARSE, SYNC, DSYNC\}
 
+\section{GUIs}
+GUIs are event driven. There are \textbf{components} which can trigger \textbf{events}, and there are \textbf{event handlers} that can handle those events.
+\subsection{Swing Components}
+There are several swing components.
+\begin{itemize}
+\item JLabel
+\item JTextField
+\item JButton
+\item JCheckBox
+\item JComboBox
+\item JList
+\item JPanel
+\end{itemize}
+
+Those components can be added to container objects like JFrame or JPanel.
+\begin{lstlisting}
+JFrame frame = new JFrame();
+frame.add(new JLabel());
+frame.add(new JButton());
+\end{lstlisting}
+
+A \textbf{layout manager} determines where components are placed within a container.\\
+To make a container or a component visible, the \textit{setVisible()} method has to be called.
+\begin{lstlisting}
+JFrame frame = new JFrame();
+frame.setVisible(true);
+\end{lstlisting}
+
+\subsection{Event Handling}
+Different components can create different events. Each event has to be handled by a specific event handler. The event handler has to register to the component in order to handle its events.\\
+There are the following events:
+\begin{itemize}
+  \item EventObject
+  \begin{itemize}
+    \item EventObject
+    \begin{itemize}
+      \item AwtEvent
+      \begin{itemize}
+		\item ActionEvent
+		\item AdjustmentEvent
+		\item ItemEvent
+		\item TextEvent
+		\item ComponentEvent
+	  \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\textit{continued...}\\
+$\rightarrow$ComponentEvent
+\begin{itemize}
+  \item ContainerEvent
+  \item FocusEvent
+  \item PaintEvent
+  \item WindowEvent
+  \item InputEvent
+  \begin{itemize}
+	\item KeyEvent
+	\item MouseEvent
+	\begin{itemize}
+	  \item MouseWheelEvent
+	\end{itemize}
+  \end{itemize}
+\end{itemize}
+
+There are also a lot of listeners which all extend EventListener:
+\begin{itemize}
+\item ActionListener
+\item AdjustmentListener
+\item ComponentListener
+\item ContainerListener
+\item FocusListener
+\item ItemListener
+\item KeyListener
+\item MouseListener
+\item MouseMotionListener
+\item TextListener
+\item WindowListener
+\end{itemize}
+
+To become an event handler a class has to implement the according event listener interface.
+\begin{lstlisting}
+class ButtonHandler implements ActionListener{
+  public void actionPerformed(ActionEvent e){
+    System.out.println("Button has been pressed");
+  }
+}
+\end{lstlisting}
+
+This handler then has to be added to the component.
+\begin{lstlisting}
+JButton button = new JButton();
+button.addActionListener(new ButtonHandler());
+\end{lstlisting}
+
 \end{multicols}
 \end{document}
+
+
