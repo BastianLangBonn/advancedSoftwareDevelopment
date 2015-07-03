@@ -1,4 +1,4 @@
-package org.brsu.exercises;
+package org.brsu.exercise1;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
