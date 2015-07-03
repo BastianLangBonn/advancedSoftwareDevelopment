@@ -1,0 +1,194 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref}
+\usepackage{cite}
+
+
+% To Do:
+% \listoffigures \listoftables
+% \setcounter{secnumdepth}{0}
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\textbf{JAVA Cheat Sheet 3}} \\
+\end{center}
+
+\section{Basic OO}
+
+\subsection{Reference types}
+In JAVA only primitive types are handled \textbf{by value}, because their representation does have a fixed size.\\
+All other objects are handled \textbf{by reference}.\\
+Thus \textbf{only} their \textbf{references are passed}, not their values $\rightarrow$ Operations on variables storing references will affect other variables holding the same reference.
+
+\subsection{Objects, classes, instances}
+Every JAVA program is a set of \textbf{classes}.\\
+Every piece of code has to be part of a class.\\
+A class is the \textbf{concept} or \textbf{blueprint} of an object.\\
+Classes can be \textbf{instantiated}, creating a concrete object from those blueprints - an \textbf{instance}.\\
+Every class is inherited of the class \textbf{Object}.
+
+\subsection{Attributes (fields, members)}
+A class can have several \textbf{attributes} describing it. Those attributes are typically declared at the top of the class and their scope is the whole class. They are called \textbf{fields} or \textbf{members}.
+
+\section{Advanced OO}
+
+\subsection{Modifiers (class, attribute, method)}
+\subsubsection{Visibility}
+\begin{itemize}
+\item \textbf{public} $\rightarrow$ Accessible from everywhere
+\item \textbf{private} $\rightarrow$ Accessible only from within this class
+\item \textbf{protected} $\rightarrow$ Accessible from this class, all sub classes and all classes in the same package.
+\item package private (no keyword) $\rightarrow$ Accessible from this class and all classes in the same package
+\end{itemize}
+\subsubsection{static}
+Can be accessed without having an instance of the class.\\
+Holds for every instance.\\
+\subsubsection{final}
+Final \textbf{classes} may \textbf{not be subclassed}.\\
+Final \textbf{methods} \textbf{cannot be overridden} by subclasses.\\
+Final \textbf{attributes} \textbf{cannot change their values} once initialized.
+
+\subsection{Constructors, initializers, memory allocation}
+\subsubsection{Constructors}
+Methods called when \textbf{initializing} an Object.\\
+Do not specify a return value.\\
+Name has to equal the class' name.\\
+Every object provides a \textbf{default constructor}.\\
+Usually used to initialize fields with user given values.\\
+
+\subsubsection{Initializers}
+Code that \textbf{does not belong to any method} inside of a class.\\
+Declaring (and initializing) fields is a common usage.\\
+Will be executed in order of appearance.
+\footnote{see http://www.dummies.com/how-to/content/what-is-an-initializer-in-java.html}\\
+
+\subsubsection{Memory Allocation}
+JAVA objects reside in the \textbf{heap}.\\
+The \emph{heap} is divided into \textbf{young space} and \textbf{old space}.\\
+The \textbf{JVM} distinguishes between \textbf{small} and \textbf{large objects}.\\
+\emph{Small objects} get allocated in \textbf{thread local areas (TLAs)} of the \emph{heap}.\\
+\emph{Large objects} are allocated in the \emph{old space}.\footnote{see https://docs.oracle.com/cd/E13150\textunderscore 01/jrockit\textunderscore jvm/jrockit/geninfo/diagnos/garbage\textunderscore collect.html}\\
+
+\subsection{Destructors, garbage collection}
+
+\subsubsection{Destructors}
+In JAVA there are no destructors. Destroying objects is \textbf{done by the garbage collector}, but there is no exact telling when this will be done.
+
+\subsubsection{Garbage Collection}
+\footnote{see https://docs.oracle.com/cd/E13150\textunderscore 01/jrockit\textunderscore jvm/jrockit/geninfo/diagnos/garbage\textunderscore collect.html}
+\textbf{Garbage collection} is the process of freeing space in the \emph{young space} for the allocation of new objects.\\
+The \emph{JVM} uses \textbf{mark and sweep} for garbage collection on the \textbf{whole heap}.\\
+It \textbf{marks} all objects as \emph{alive} that are \"reachable\" from threads, native handles and other root sources and also those objects reachable from \emph{alive} objects. The rest is considered garbage.\\
+It then identifies the free space between the \emph{alive} objects. This is called \textbf{sweeping}.\\
+Garbage collection on the \textbf{young space} is called \textbf{young collection}.\\
+The \textbf{young collector} promotes all live objects outside a so called \textbf{keep area} to the \textbf{old space}.\\
+A garbage collection strategy using a \emph{young space} is called \textbf{generational garbage collection strategy}.\\
+There are several \textbf{garbage collection modes}:\\
+\textbf{dynamic modes:}
+\begin{itemize}
+\item throughput $\rightarrow$ maximum application throughput
+\item pausetime $\rightarrow$ short and even pause times
+\item determinicstic $\rightarrow$ very short and deterministic pause times
+\end{itemize}
+\textbf{static modes:}
+\begin{itemize}
+\item singlepar $\rightarrow$ single-generational parallel garbage collector
+\item genpar $\rightarrow$ two-generational parallel garbage collector
+\item singlecon $\rightarrow$ single-generational mostly concurrent garbage collector
+\item gencon $\rightarrow$ two-generational mostly concurrent garbage collector
+\end{itemize}
+\textbf{Compaction} is used to \textbf{get rid of small chunks of space} in the heap and to instead \textbf{create bigger chunks} by moving objects in the heap closer together.
+
+\subsection{Inheritance}
+In JAVA except for the class \emph{Object} every class has exactly one \textbf{superclass}.\\
+A \textbf{subclass} inherits fields and methods from its superclass.\\
+Eventually, every class inherits from the class \emph{Object}.\\
+To subclass another class use keyword \textbf{extends}.\\
+\emph{public class Audi \textbf{extends} Car\{...\}}
+
+\subsection{Polymorphism}
+In JAVA every class is also an instance of its superclass.\\
+As for this holds also for the superclass, every class in JAVA may be an instance of many different classes.\\
+Eventually every class is an instance of \emph{Object}.\\
+\textbf{possible:}\\
+\emph{Car car = new Audi();} $\leftarrow$ if Audi extends Car.\\
+But now only functionality of type Car is accessible, even if the assigned type is an Audi. 
+
+\subsection{Local, inner, anonymous classes}
+An \textbf{inner class} is a class defined within another class. So the inner class can only be accessed from an instance of the outer class.\\
+A \textbf{locale class} is a class that is defined in a block of another class, typically a method.\\
+A local class can only be used within the block where it is declared - it has \textbf{local scope}.\\
+\emph{OuterClass.InnerClass innerObject = outerObject.new InnerClass();}
+\footnote{see https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html}\\
+An \textbf{anonymous class} is a class that is declared and instantiated at the same time.\\
+\emph{Car car = new Audi()\{...$<$class definition here$>$...\}}
+
+\subsection{Modularization, packages, archives}
+\textbf{Packages} and \textbf{archives} are ways to \textbf{modularize code}. Packages have a hierarchical \textbf{tree-like structure} and function as folders for code.\\
+\textbf{JAVA archive files (JARs)} are archives containing packages and their contained classes.
+
+
+\end{multicols}
+\end{document}
