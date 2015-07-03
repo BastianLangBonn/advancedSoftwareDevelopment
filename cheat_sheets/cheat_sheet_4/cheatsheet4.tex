@@ -1,0 +1,264 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+
+% To Do:
+% \listoffigures \listoftables
+% \setcounter{secnumdepth}{0}
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\textbf{JAVA Cheat Sheet 4\\Data Structures and Advanced Concepts}} \\
+\end{center}
+
+\section{Data Structures}
+\subsection{Arrays}
+
+\begin{itemize}
+\item Objects that store multiple variables of the same type.
+\item Can hold either primitives or object references.
+\item Will always be an object on the heap.
+\end{itemize}
+\subsubsection{Declaration}
+\begin{lstlisting}
+// common
+int[] key; 
+// better avoid due to readability
+int key [];
+\end{lstlisting}
+\subsubsection{Construction}
+Creates the object on the heap.\\
+
+\begin{lstlisting}
+// The size has to be specified
+int[] myArray = new int[3];
+\end{lstlisting}
+
+For multidimensional arrays omitting the second dimension's size is possible:\\
+
+\begin{lstlisting}
+int[][] myArray = new int[3][];
+\end{lstlisting}
+\subsubsection{Initializing}
+Arrays can be initialized by assigning values to their elements:\\
+\begin{lstlisting}
+int[] myArray = int[3];
+myArray[0] = 5;
+\end{lstlisting}
+The index always starts with 0 and the highest index equals the array's length -1.\\
+Declaration, construction and initialization is also possible in one single step:\\
+\begin{lstlisting} 
+int[] dots = {1,3,5}
+\end{lstlisting}
+
+\subsubsection{Anonymous Array Creation}
+It is possible to create an anonymous array, for example to pass it as a functions parameter.\\
+\begin{lstlisting}
+functionCall(new int[]{1,2,3});
+\end{lstlisting}
+
+\subsection{Enumerations}
+The JAVA type for enumerations is called enum.\\
+The restrict the values for a variable to a predefined set of values.\\
+\begin{lstlisting}
+enum CoffeeSize{
+  BIG, HUGE, OVERWHELMING
+};
+\end{lstlisting}
+The ';' at the end is optional.\\
+An enum can be seen as a special kind of class. The values are constants (public static final) instances of this class. One can define constructors and other methods:
+\begin{lstlisting}
+enum CoffeeSize{
+  BIG(8), HUGE(10), OVERWHELMING(16);
+  CoffeeSize(int ounces){
+    this.ounces = ounces;
+  }
+  private int ounces;
+  private int getOunces(){
+    return this.ounces;
+  }
+}
+\end{lstlisting} 
+Enums also can have a constant specific class body which overrides a method:\\
+\begin{lstlisting}
+  ...
+  OVERWHELMING(16){
+    public String getLidCode(){
+      return "B";
+    }
+  };
+  ...
+\end{lstlisting}
+
+The enum-class implements equals and hashCode, therefore it is possible to use enums as keys for maps.
+
+\subsection{Lists, Trees, Collections}
+In JAVA we distinguish between \textbf{collections}, a \textbf{Collection} and the utility class \textbf{Collections}.\\
+There are many classes considered to fulfil the concept of a collection. Those are collections. Then there is the class Collection, which is the interface for a subset of these collections. And then there is a utility class providing static methods for collections.\\
+The single collections cannot take primitives as elements. In this case one have to use the wrapper types. Java implicitly uses \textbf{auto-boxing}, so it is possible to give primitives as arguments instead of their wrapper type representations.
+\subsubsection{Overview over the collections}
+\begin{itemize}
+	\item Collection
+	\begin{itemize}
+		\item Set
+		\begin{itemize}
+			\item HashSet
+			\begin{itemize}
+				\item LinkedHashSet
+			\end{itemize}
+			\item SortedSet
+		\end{itemize}
+		\item List
+		\begin{itemize}
+			\item ArrayList
+			\item Vector
+			\item LinkedList
+		\end{itemize}
+		\item Queue
+		\begin{itemize}
+			\item LinkedList
+			\item PriorityQueue
+		\end{itemize}
+	\end{itemize}
+	\item Map
+	\begin{itemize}
+		\item HashTable
+		\item HashMap
+		\begin{itemize}
+			\item LinkedHashMap
+		\end{itemize}
+		\item SortedMap
+		\begin{itemize}
+			\item Navigable Map
+			\begin{itemize}
+				\item TreeMap
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Lists}
+There are three implementations of the interface List. They all provide the common methods of Collection and additionally provide methods related to the index of an element.\\
+\textbf{ArrayList}\\
+An ArrayList provides fast access and fast iterations over its elements.\\
+But every time its allocated memory is exceeded by inserting new elements a new list has to be created and the whole old list has to copied into the new list.\\
+\begin{lstlisting}
+List<String> list = new ArrayList<String>();
+list.add("hello");
+String string = list.get(0);
+\end{lstlisting}
+\textbf{Vector}\\
+Leftover from earlier JAVA versions. Mainly the same as an ArrayList, but uses synchronized methods for the use in multi-threading, which makes it slower.\\
+\begin{lstlisting}
+List<String> list = new Vector<String>();
+list.add("hello");
+String string = list.get(0);
+\end{lstlisting}
+\textbf{LinkedList}\\
+A double-linked list. Provides methods for adding from the beginning or the end, which makes it a good choice for queues or stacks. Insertion and Deletion is faster than for the other two lists, but iteration and access may be slower.
+\begin{lstlisting}
+List<String> list = new LinkedList<String>();
+list.add("hello");
+String string = list.get(0);
+\end{lstlisting}
+\subsubsection{Trees}
+There are only two structures using trees:
+\begin{itemize}
+\item TreeSet
+\item TreeMap
+\end{itemize}
+Both provide an ascending order for the elements based on the elements' natural order.\\
+The methods \textbf{lower}($<$), \textbf{floor}($\leq$) and \textbf{higher}($>$), \textbf{ceiling}($\geq$) can be used to navigate or search within tree structures.\\
+
+\subsubsection{Collections}
+This class contains utility methods for collections, for example to search elements, sort collections, reverse the order of a list and so on.
+
+\section{Advanced Concepts}
+\subsection{Iterators}
+An \textbf{iterator} is an object that lets one loop over a collection step by step.\\
+\begin{lstlisting}
+Iterator<Dog> iterator = d.iterator();
+while(iterator.hasNext()){
+  Dog dog = iterator.next();
+  System.out.println(dog.name);
+}
+\end{lstlisting}
+
+\subsection{Recursion}
+
+\subsection{Templates}
+
+\subsection{Generics}
+
+\subsection{Reflection}
+
+\subsection{Annotation}
+
+\end{multicols}
+\end{document}
