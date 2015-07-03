@@ -76,7 +76,7 @@
 \begin{center}
      \Large{\textbf{JAVA Cheat Sheet 4\\Data Structures and Advanced Concepts}} \\
 \end{center}
-
+\textit{If not noted otherwise most of the information is taken from Kathy Sierra, Bert Bates, "Sun Certified Programmer for Java 6", The McGraw-Hill Companies, 2008}
 \section{Data Structures}
 \subsection{Arrays}
 
@@ -251,14 +251,76 @@ while(iterator.hasNext()){
 \end{lstlisting}
 
 \subsection{Recursion}
+If a function calls itself, it is called recursive.
+\begin{lstlisting}
+int factorial(int k)
+{
+  if(k == 1)
+    return 1;
+  else
+  {
+    return(k*(factorial(k-1)));
+  }
+} 
+\end{lstlisting}
 
 \subsection{Templates}
+There is no concept called 'templates' in JAVA. For generic programming JAVA uses generics.
 
 \subsection{Generics}
+Generics are a way to ensure type safety for classes that uses variable types. Collections are the most common example. The angle brackets define the type of the elements used in the collection and ensure that the taken and returned objects are of the specific type. This way the programmer does not need to cast and may run into \textit{ClassCastExceptions}.\\
+Note that it is not possible to use sub- or super-types as generic types. For the base type this is okay.
+\begin{lstlisting}
+// valid
+List<Integer> myList = new ArrayList<Integer>();
+// not valid
+ArrayList<Animal> myList = new ArrayList<Dog>();
+\end{lstlisting}
+
+To be able to use also sub/super types, one can use the wildcard '?':
+\begin{lstlisting}
+public void addAnimal(List<? super Dog> animals){
+  animals.add(new Dog());
+}
+\end{lstlisting}
+
 
 \subsection{Reflection}
+Reflection provides the possibility to have a look at the functions an object provides during runtime.
+\begin{lstlisting}
+Method method = myClass.getClass()
+  .getMethod("doSomething", null);
+method.invoke(myClass, null);
+\end{lstlisting}
 
 \subsection{Annotation}
+"Annotations, a form of metadata, provide data about a program that is not part of the program itself. Annotations have no direct effect on the operation of the code they annotate."\\
+(https://docs.oracle.com/javase/tutorial/java/annotations/)\\
+There are seven predefined annotations:
+\begin{itemize}
+\item @Deprecated
+\item @Override
+\item @SuppressWarnings
+\item @SafeVarargs
+\item @Documented
+\item @Inherited
+\item @Retention
+\item @Target
+\end{itemize}
+The user can also create his own annotations.
+\begin{lstlisting}
+@interface Person {
+  String name();
+  int alter();
+}
+\end{lstlisting}
+
+And use it:
+\begin{lstlisting}
+@Person(name = "Andreas Solymosi", alter = 56)
+Konto konto = new Konto();
+\end{lstlisting}
+(https://de.wikipedia.org/wiki/Annotation\textunderscore\%28Java\%29)
 
 \end{multicols}
 \end{document}
