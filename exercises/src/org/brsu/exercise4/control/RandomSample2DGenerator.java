@@ -102,14 +102,21 @@ public class RandomSample2DGenerator {
 		return result;
 	}
 
-	public Set<Sample2D> generateWeightedSet(Set<Sample2D> samples) {
-		Set<Sample2D> result = new HashSet<Sample2D>(samples.size());
+	/**
+	 * Generates a new set weighted according to a random pose.
+	 * 
+	 * @param originalSamples
+	 * @return
+	 */
+	public Set<Sample2D> generateWeightedSet(Set<Sample2D> originalSamples) {
+		Set<Sample2D> result = new HashSet<Sample2D>(originalSamples.size());
+		// compute real pose - weight is not important here
 		Sample2D realPose = generateSampleAroundDistributions(0);
 		double realX = realPose.getX();
 		double realY = realPose.getY();
 		double realTheta = realPose.getTheta();
 
-		for (Sample2D sample : samples) {
+		for (Sample2D sample : originalSamples) {
 			double sampleX = sample.getX();
 			double sampleY = sample.getY();
 			double sampleTheta = sample.getTheta();
@@ -123,28 +130,33 @@ public class RandomSample2DGenerator {
 		return result;
 	}
 
-	public Set<Sample2D> resampleSet(Set<Sample2D> samples) {
-		Set<Sample2D> result = new HashSet<Sample2D>(samples.size());
+	/**
+	 * Method to resample a given set of samples based on the samples' weights.
+	 * 
+	 * @param originalSamples
+	 *          A {@link Set} of {@link Sample2D}s.
+	 * @return A new resampled {@link Set} of {@link Sample2D}s.
+	 */
+	public Set<Sample2D> resampleSet(Set<Sample2D> originalSamples) {
+		Set<Sample2D> result = new HashSet<Sample2D>(originalSamples.size());
 
-		for (int i = 0; i < samples.size(); i++) {
+		// Create a new sample for every sample
+		for (int i = 0; i < originalSamples.size(); i++) {
 			double randomNumber = random.nextDouble();
-			// get index
+			// compute sample to use for resampling
 			double currentWeight = 0;
-			for (Sample2D sample : samples) {
+			for (Sample2D sample : originalSamples) {
 				currentWeight += sample.getWeight();
-				System.out.println();
 				if (randomNumber < currentWeight) {
-					double x = sample.getX();
-					double y = sample.getY();
-					double theta = sample.getTheta();
-					double weight = 1.0 / samples.size();
-
+					// Create new sample
+					double x = random.nextGaussian() * SamplingConstants.SIGMA_X + sample.getX();
+					double y = random.nextGaussian() * SamplingConstants.SIGMA_Y + sample.getY();
+					double theta = random.nextGaussian() * SamplingConstants.SIGMA_THETA + sample.getTheta();
+					double weight = 1.0 / originalSamples.size();
 					result.add(new Sample2D(x, y, theta, weight));
 					break;
 				}
 			}
-			// System.out.println(String.format("No match found for %f. Current weight: %f.",
-			// randomNumber, currentWeight));
 		}
 		return result;
 	}

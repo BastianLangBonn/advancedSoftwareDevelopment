@@ -23,21 +23,24 @@ public class Application {
 		new Sample2DVisualizer("1000 gaussian distributed 2D samples", gaussians1000);
 		new Sample2DVisualizer("10k gaussian distributed 2D samples", gaussians10k);
 
-		Set<Sample2D> resampled10 = generator.resampleSet(gaussians10);
-		// Set<Sample2D> resampled100 = generator.resampleSet(gaussians100);
-		// Set<Sample2D> resampled1000 = generator.resampleSet(gaussians1000);
-		// Set<Sample2D> resampled10k = generator.resampleSet(gaussians10k);
-		// new Sample2DVisualizer("10 resampled gaussian distributed 2D samples",
-		// resampled10);
-		// new Sample2DVisualizer("100 resampled distributed 2D samples",
-		// resampled100);
-		// new Sample2DVisualizer("1000 resampled distributed 2D samples",
-		// resampled1000);
-		// new Sample2DVisualizer("10k resampled distributed 2D samples",
-		// resampled10k);
+		Set<Sample2D> resampled10 = null;
+		Set<Sample2D> resampled100 = null;
+		Set<Sample2D> resampled1000 = null;
+		Set<Sample2D> resampled10k = null;
+		// for (int i = 0; i < 1000; i++) {
+		resampled10 = generator.resampleSet(gaussians10);
+		resampled100 = generator.resampleSet(gaussians100);
+		resampled1000 = generator.resampleSet(gaussians1000);
+		resampled10k = generator.resampleSet(gaussians10k);
 
-		// System.out.println(gaussians10.size());
-		// System.out.println(resampled10.size());
+		// resampled10 = generator.generateWeightedSet(resampled10);
+		// resampled100 = generator.generateWeightedSet(resampled100);
+		// resampled1000 = generator.generateWeightedSet(resampled100);
+		// }
 
+		new Sample2DVisualizer("10 resampled gaussian distributed 2D samples", resampled10);
+		new Sample2DVisualizer("100 resampled distributed 2D samples", resampled100);
+		new Sample2DVisualizer("1000 resampled distributed 2D samples", resampled1000);
+		new Sample2DVisualizer("10k resampled distributed 2D samples", resampled10k);
 	}
 }
