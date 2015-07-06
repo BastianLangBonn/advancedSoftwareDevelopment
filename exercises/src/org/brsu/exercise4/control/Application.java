@@ -33,9 +33,10 @@ public class Application {
 		resampled1000 = generator.resampleSet(gaussians1000);
 		resampled10k = generator.resampleSet(gaussians10k);
 
-		// resampled10 = generator.generateWeightedSet(resampled10);
-		// resampled100 = generator.generateWeightedSet(resampled100);
-		// resampled1000 = generator.generateWeightedSet(resampled100);
+		resampled10 = generator.generateWeightedSet(resampled10);
+		resampled100 = generator.generateWeightedSet(resampled100);
+		resampled1000 = generator.generateWeightedSet(resampled100);
+		resampled10k = generator.generateWeightedSet(resampled10k);
 		// }
 
 		new Sample2DVisualizer("10 resampled gaussian distributed 2D samples", resampled10);
