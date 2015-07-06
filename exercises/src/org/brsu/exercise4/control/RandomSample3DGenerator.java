@@ -34,14 +34,7 @@ public class RandomSample3DGenerator {
 		double gamma = SamplingUtils.getNewRandomWithinBounds(SamplingConstants.ANGLE_MIN, SamplingConstants.ANGLE_MAX
 		    - SamplingConstants.CLAMP_PRECISION);
 
-		Sample3D result = new Sample3D();
-		result.setX(x);
-		result.setY(y);
-		result.setZ(z);
-		result.setAlpha(alpha);
-		result.setBeta(beta);
-		result.setGamma(gamma);
-		return result;
+		return new Sample3D(x, y, z, alpha, beta, gamma, weight);
 	}
 
 	/**
@@ -85,14 +78,7 @@ public class RandomSample3DGenerator {
 		beta = SamplingUtils.clampValueWithinBounds(beta, SamplingConstants.ANGLE_MIN, SamplingConstants.ANGLE_MAX);
 		gamma = SamplingUtils.clampValueWithinBounds(gamma, SamplingConstants.ANGLE_MIN, SamplingConstants.ANGLE_MAX);
 
-		Sample3D result = new Sample3D();
-		result.setX(x);
-		result.setY(y);
-		result.setZ(z);
-		result.setAlpha(alpha);
-		result.setBeta(beta);
-		result.setGamma(gamma);
-		return result;
+		return new Sample3D(x, y, z, alpha, beta, gamma, weight);
 	}
 
 	/**
@@ -141,15 +127,41 @@ public class RandomSample3DGenerator {
 		    SamplingConstants.SIGMA_ANGLE);
 		double weight = xDensity * yDensity * zDensity * alphaDensity * betaDensity * gammaDensity;
 
-		Sample3D weightedSample = new Sample3D();
-		weightedSample.setX(sample.getX());
-		weightedSample.setY(sample.getY());
-		weightedSample.setZ(sample.getZ());
-		weightedSample.setAlpha(sample.getAlpha());
-		weightedSample.setBeta(sample.getBeta());
-		weightedSample.setGamma(sample.getGamma());
-		weightedSample.setWeight(weight);
-		return weightedSample;
+		return new Sample3D(sample.getX(), sample.getY(), sample.getZ(), sample.getAlpha(), sample.getBeta(),
+		    sample.getGamma(), weight);
 	}
 
+	/**
+	 * Method to resample a given set of samples based on the samples' weights.
+	 * 
+	 * @param originalSamples
+	 *          A {@link Set} of {@link Sample3D}s.
+	 * @return A new resampled {@link Set} of {@link Sample3D}s.
+	 */
+	public Set<Sample3D> resampleSet(Set<Sample3D> originalSamples) {
+		Set<Sample3D> result = new HashSet<Sample3D>(originalSamples.size());
+
+		// Create a new sample for every sample
+		for (int i = 0; i < originalSamples.size(); i++) {
+			double randomNumber = random.nextDouble();
+			// compute sample to use for resampling
+			double currentWeight = 0;
+			for (Sample3D sample : originalSamples) {
+				currentWeight += sample.getWeight();
+				if (randomNumber < currentWeight) {
+					// Create new sample
+					double x = random.nextGaussian() * SamplingConstants.SIGMA_X + sample.getX();
+					double y = random.nextGaussian() * SamplingConstants.SIGMA_Y + sample.getY();
+					double z = random.nextGaussian() * SamplingConstants.SIGMA_Z + sample.getZ();
+					double alpha = random.nextGaussian() * SamplingConstants.SIGMA_ANGLE + sample.getAlpha();
+					double beta = random.nextGaussian() * SamplingConstants.SIGMA_ANGLE + sample.getBeta();
+					double gamma = random.nextGaussian() * SamplingConstants.SIGMA_ANGLE + sample.getGamma();
+					double weight = 1.0 / originalSamples.size();
+					result.add(new Sample3D(x, y, z, alpha, beta, gamma, weight));
+					break;
+				}
+			}
+		}
+		return result;
+	}
 }

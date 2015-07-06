@@ -17,6 +17,16 @@ public class Sample3D {
 
 	private double weight;
 
+	public Sample3D(double x, double y, double z, double alpha, double beta, double gamma, double weight) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.alpha = alpha;
+		this.beta = beta;
+		this.gamma = gamma;
+		this.weight = weight;
+	}
+
 	public double getX() {
 		return x;
 	}
