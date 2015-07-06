@@ -1,9 +1,0 @@
-\BOOKMARK [1][-]{section*.1}{I/O}{}% 1
-\BOOKMARK [2][-]{section*.2}{Byte Streams}{section*.1}% 2
-\BOOKMARK [2][-]{section*.3}{Character Streams}{section*.1}% 3
-\BOOKMARK [2][-]{section*.4}{Line-Oriented I/O}{section*.1}% 4
-\BOOKMARK [2][-]{section*.5}{Scanner}{section*.1}% 5
-\BOOKMARK [2][-]{section*.6}{I/O From Command Line}{section*.1}% 6
-\BOOKMARK [2][-]{section*.7}{Data Streams}{section*.1}% 7
-\BOOKMARK [2][-]{section*.8}{Object Streams}{section*.1}% 8
-\BOOKMARK [2][-]{section*.9}{File I/O With NIO}{section*.1}% 9

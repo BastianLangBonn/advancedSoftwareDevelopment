@@ -1,0 +1,281 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{listings}
+
+
+% To Do:
+% \listoffigures \listoftables
+% \setcounter{secnumdepth}{0}
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\textbf{JAVA Cheat Sheet 6\\I/O and GUIs}} \\
+\end{center}
+
+\section{I/O}
+"A \textbf{stream} is a sequence if data."\\
+"A program uses an \textbf{input stream} to read data from a source."\\
+"A program uses an \textbf{output stream} to write data to a destination."  \textit{(docs.oracle.com)}\\
+\subsection{Byte Streams}
+In Java all stream types are built upon \textbf{ByteStreams}.
+\begin{lstlisting}
+FileInputStream in 
+  = new FileInputStream(fileName);
+FileOutputStream out 
+  = new FileOutputStream(fileName);
+int c;
+while((c = in.read()) != -1){
+  out.write(c);
+}
+\end{lstlisting}
+\subsection{Character Streams}
+\textbf{FileReader} and \textbf{FileWriter} use \textit{FileInputStream} and \textit{FileOutputStream} internally.\\
+\begin{lstlisting}
+FileReader in = new FileReader(fileName);
+FileWriter out = new FileWriter(fileName);
+int c;
+while((c = in.read()) != -1){
+ out.write(c);
+}
+\end{lstlisting}
+Use ints to store last 16 bits instead of last 8 bits.\\
+
+\subsection{Line-Oriented I/O}
+\textit{BufferedReader.readLine()} uses line terminators to split the lines.\\
+\begin{lstlisting}
+BufferedReader in = 
+  new BufferedReader(new FileReader(fileName));
+PrintWriter out = 
+  new PrintWriter(new FileWriter(fileName));
+String line;
+while((line = in.readLine()) != null){
+ out.println(line);
+}
+\end{lstlisting}
+
+\subsection{Scanner}
+\begin{lstlisting}
+Scanner s = new Scanner(<Stream>);
+while(s.hasNext()){
+ doSomething...
+}
+\end{lstlisting}
+Using different delimiter with: 
+\begin{lstlisting}
+s.useDelimiter(Regex);
+\end{lstlisting}
+
+\subsection{I/O From Command Line}
+\begin{lstlisting}
+InputStreamReader in = 
+  new InputStreamReader(System.in);
+\end{lstlisting}
+Or use \textbf{Console}:\\
+\begin{lstlisting}
+Console c = System.console();
+\end{lstlisting}
+Returns \textit{null} if not available.\\
+
+\subsection{Data Streams}
+Streams to read and write primitive data types.\\
+\begin{lstlisting}
+DataInputStream in = 
+  new DataInputStream(
+    new FileInputStream(fileName));
+    
+DataOutputStream out = 
+  new DataOutputStream(
+    new BufferedOutputStream(
+      new FileOutputStream(fileName)));
+      
+in.readDouble(); / out.writeDouble(someDouble);
+in.readInt(); / out.writeInt(someInt);
+in.readUTF(); / out.writeUTF(someString);
+\end{lstlisting}
+
+\subsection{Object Streams}
+Java objects can be written to files if they implement the \textbf{Serializable} marker interface.\\
+Every reference inside this object will also be written to the file.\\
+Classes to use are \textbf{ObjectInputStream} and \textbf{ObjectOutputStream}.\\
+
+\subsection{File I/O With NIO}
+New since Java7.\\
+Class \textbf{Path} to represent a path.\\
+\begin{lstlisting}
+Path p = Paths.get("/tmp/foo");
+\end{lstlisting}
+For releasing resources after use, use \textbf{try-with-resources}:\\
+\begin{lstlisting}
+try(BufferedWriter writer = 
+  Files.newBufferedWriter(file, charset));
+\end{lstlisting}
+For file handling use class \textbf{Files}.\\
+\begin{lstlisting}
+Files.write(Path, byte[], OpenOption...);
+\end{lstlisting}
+\textbf{OpenOptions}:\\
+\{WRITE, APPEND, TRUNCATE\textunderscore EXISTING, CREATE\textunderscore NEW, CREATE, DELETE\textunderscore ON\textunderscore CLOSE, SPARSE, SYNC, DSYNC\}
+
+\section{GUIs}
+GUIs are event driven. There are \textbf{components} which can trigger \textbf{events}, and there are \textbf{event handlers} that can handle those events.
+\subsection{Swing Components}
+There are several swing components.
+\begin{itemize}
+\item JLabel
+\item JTextField
+\item JButton
+\item JCheckBox
+\item JComboBox
+\item JList
+\item JPanel
+\end{itemize}
+
+Those components can be added to container objects like JFrame or JPanel.
+\begin{lstlisting}
+JFrame frame = new JFrame();
+frame.add(new JLabel());
+frame.add(new JButton());
+\end{lstlisting}
+
+A \textbf{layout manager} determines where components are placed within a container.\\
+To make a container or a component visible, the \textit{setVisible()} method has to be called.
+\begin{lstlisting}
+JFrame frame = new JFrame();
+frame.setVisible(true);
+\end{lstlisting}
+
+\subsection{Event Handling}
+Different components can create different events. Each event has to be handled by a specific event handler. The event handler has to register to the component in order to handle its events.\\
+There are the following events:
+\begin{itemize}
+  \item EventObject
+  \begin{itemize}
+    \item EventObject
+    \begin{itemize}
+      \item AwtEvent
+      \begin{itemize}
+		\item ActionEvent
+		\item AdjustmentEvent
+		\item ItemEvent
+		\item TextEvent
+		\item ComponentEvent
+	  \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\textit{continued...}\\
+$\rightarrow$ComponentEvent
+\begin{itemize}
+  \item ContainerEvent
+  \item FocusEvent
+  \item PaintEvent
+  \item WindowEvent
+  \item InputEvent
+  \begin{itemize}
+	\item KeyEvent
+	\item MouseEvent
+	\begin{itemize}
+	  \item MouseWheelEvent
+	\end{itemize}
+  \end{itemize}
+\end{itemize}
+
+There are also a lot of listeners which all extend EventListener:
+\begin{itemize}
+\item ActionListener
+\item AdjustmentListener
+\item ComponentListener
+\item ContainerListener
+\item FocusListener
+\item ItemListener
+\item KeyListener
+\item MouseListener
+\item MouseMotionListener
+\item TextListener
+\item WindowListener
+\end{itemize}
+
+To become an event handler a class has to implement the according event listener interface.
+\begin{lstlisting}
+class ButtonHandler implements ActionListener{
+  public void actionPerformed(ActionEvent e){
+    System.out.println("Button has been pressed");
+  }
+}
+\end{lstlisting}
+
+This handler then has to be added to the component.
+\begin{lstlisting}
+JButton button = new JButton();
+button.addActionListener(new ButtonHandler());
+\end{lstlisting}
+
+\end{multicols}
+\end{document}
+
+
