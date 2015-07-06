@@ -127,8 +127,11 @@ public class Solver {
 		// int[] rowConstraints = { 2, 2, 0, 3, 3 };
 		// int[] columnConstraints = { 2, 4, 2, 2 };
 		// 6x6
-		int[] rowConstraints = { 4, 4, 0, 5, 5, 5 };
-		int[] columnConstraints = { 5, 5, 3, 2, 5, 3 };
+		// int[] rowConstraints = { 4, 4, 0, 5, 5, 5 };
+		// int[] columnConstraints = { 5, 5, 3, 2, 5, 3 };
+		// 8x9
+		int[] rowConstraints = { 5, 7, 2, 6, 6, 4, 2, 6, 6 };
+		int[] columnConstraints = { 7, 7, 0, 7, 7, 4, 7, 7 };
 
 		// 10x10
 		// int[] rowConstraints = { 7, 7, 7, 4, 4, 6, 2, 8, 6, 2 };
