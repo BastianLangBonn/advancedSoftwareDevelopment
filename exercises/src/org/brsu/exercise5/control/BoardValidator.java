@@ -18,7 +18,7 @@ public class BoardValidator {
 		this.board = board;
 		this.rowConstraints = rowConstraints;
 		this.columnConstraints = columnConstraints;
-		if (board.getWidth() != rowConstraints.length || board.getHeight() != columnConstraints.length) {
+		if (board.getWidth() != columnConstraints.length || board.getHeight() != rowConstraints.length) {
 			throw new IllegalArgumentException(String.format("The dimensions of the constraints are wrong."));
 		}
 
@@ -30,14 +30,17 @@ public class BoardValidator {
 	 * @return
 	 */
 	public boolean validateTiles() {
+		if (!checkColumnConstraints()) {
+			return false;
+		}
+		if (!checkRowConstraints()) {
+			return false;
+		}
 		boolean isValid = true;
 		for (int i = 0; i < board.getWidth(); i++) {
 			for (int j = 0; j < board.getHeight(); j++) {
 				if (board.getTile(i, j)) {
-					isValid = checkColumnConstraints();
-					isValid = isValid && checkRowConstraints();
-					isValid = isValid && checkForValidRectangle(i, j);
-					isValid = isValid && checkForTouchingRectangles(i, j);
+					isValid = checkForValidRectangle(i, j) && checkForTouchingRectangles(i, j);
 					if (!isValid) {
 						return false;
 					}
@@ -71,7 +74,7 @@ public class BoardValidator {
 			if (x > 0 && board.getTile(x - 1, y - 1)) {
 				return false;
 			}
-			if (y < board.getHeight() - 1 && board.getTile(x + 1, y - 1)) {
+			if (x < board.getWidth() - 1 && board.getTile(x + 1, y - 1)) {
 				return false;
 			}
 		}
@@ -109,7 +112,7 @@ public class BoardValidator {
 	}
 
 	private boolean checkRowConstraints() {
-		for (int i = 0; i < board.getWidth(); i++) {
+		for (int i = 0; i < board.getHeight(); i++) {
 			if (board.getNumberOfBlackTilesInRow(i) != rowConstraints[i]) {
 				return false;
 			}
@@ -118,7 +121,7 @@ public class BoardValidator {
 	}
 
 	private boolean checkColumnConstraints() {
-		for (int i = 0; i < board.getHeight(); i++) {
+		for (int i = 0; i < board.getWidth(); i++) {
 			if (board.getNumberOfBlackTilesInColumn(i) != columnConstraints[i]) {
 				return false;
 			}
@@ -136,7 +139,7 @@ public class BoardValidator {
 	 * @param yBottom
 	 * @return
 	 */
-	public boolean checkValidBlock(int xLeft, int xRight, int yTop, int yBottom) {
+	public boolean checkBlockIsValid(int xLeft, int xRight, int yTop, int yBottom) {
 		Board possibleBoard = new Board(board);
 		possibleBoard.setBlockOfTiles(xLeft, yTop, xRight, yBottom);
 		BoardValidator boardValidator = new BoardValidator(possibleBoard, rowConstraints, columnConstraints);
