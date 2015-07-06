@@ -1,5 +1,11 @@
 package org.brsu.exercise4.model;
 
+/**
+ * Class to represent a 2D sample pose.
+ * 
+ * @author Bastian Lang
+ * 
+ */
 public class Sample2D {
 	private double x;
 	private double y;

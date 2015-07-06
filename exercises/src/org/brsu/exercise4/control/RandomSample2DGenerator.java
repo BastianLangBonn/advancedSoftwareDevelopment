@@ -7,13 +7,15 @@ import java.util.Set;
 import org.brsu.exercise4.model.Sample2D;
 import org.brsu.exercise4.model.SamplingConstants;
 
+/**
+ * Class to perform sampling actions for {@link Sample2D}s.
+ * 
+ * @author Bastian Lang
+ * 
+ */
 public class RandomSample2DGenerator {
 
-	private Random random;
-
-	public RandomSample2DGenerator() {
-		random = new Random();
-	}
+	private Random random = new Random();
 
 	/**
 	 * Creates a new {@link Sample2D} within the given bounds and the given
@@ -23,10 +25,10 @@ public class RandomSample2DGenerator {
 	 * @return
 	 */
 	public Sample2D generateUniformlyDistributedSample(double weight) {
-		weight = clampValueWithinBounds(weight, SamplingConstants.WEIGHT_MIN, SamplingConstants.WEIGHT_MAX);
-		double x = getNewRandomWithinBounds(SamplingConstants.X_MIN, SamplingConstants.X_MAX);
-		double y = getNewRandomWithinBounds(SamplingConstants.Y_MIN, SamplingConstants.Y_MAX);
-		double theta = getNewRandomWithinBounds(SamplingConstants.THETA_MIN, SamplingConstants.THETA_MAX
+		weight = SamplingUtils.clampValueWithinBounds(weight, SamplingConstants.WEIGHT_MIN, SamplingConstants.WEIGHT_MAX);
+		double x = SamplingUtils.getNewRandomWithinBounds(SamplingConstants.X_MIN, SamplingConstants.X_MAX);
+		double y = SamplingUtils.getNewRandomWithinBounds(SamplingConstants.Y_MIN, SamplingConstants.Y_MAX);
+		double theta = SamplingUtils.getNewRandomWithinBounds(SamplingConstants.ANGLE_MIN, SamplingConstants.ANGLE_MAX
 		    - SamplingConstants.CLAMP_PRECISION);
 		return new Sample2D(x, y, theta, weight);
 	}
@@ -45,12 +47,12 @@ public class RandomSample2DGenerator {
 		int distributionIndex = random.nextInt(numberOfDistributions);
 		double x = (random.nextGaussian() * SamplingConstants.SIGMA_X) + SamplingConstants.X_MEANS[distributionIndex];
 		double y = (random.nextGaussian() * SamplingConstants.SIGMA_Y) + SamplingConstants.Y_MEANS[distributionIndex];
-		double theta = (random.nextGaussian() * SamplingConstants.SIGMA_THETA)
-		    + SamplingConstants.THETA_MEANS[distributionIndex];
+		double theta = (random.nextGaussian() * SamplingConstants.SIGMA_ANGLE)
+		    + SamplingConstants.ANGLE_MEANS[distributionIndex];
 
-		x = clampValueWithinBounds(x, SamplingConstants.X_MIN, SamplingConstants.X_MAX);
-		y = clampValueWithinBounds(y, SamplingConstants.Y_MIN, SamplingConstants.Y_MAX);
-		theta = clampValueWithinBounds(theta, SamplingConstants.THETA_MIN, SamplingConstants.THETA_MAX);
+		x = SamplingUtils.clampValueWithinBounds(x, SamplingConstants.X_MIN, SamplingConstants.X_MAX);
+		y = SamplingUtils.clampValueWithinBounds(y, SamplingConstants.Y_MIN, SamplingConstants.Y_MAX);
+		theta = SamplingUtils.clampValueWithinBounds(theta, SamplingConstants.ANGLE_MIN, SamplingConstants.ANGLE_MAX);
 
 		return new Sample2D(x, y, theta, weight);
 	}
@@ -88,20 +90,6 @@ public class RandomSample2DGenerator {
 		return result;
 	}
 
-	private double getNewRandomWithinBounds(double minValue, double maxValue) {
-		return random.nextDouble() * (maxValue - minValue) + minValue;
-	}
-
-	private double clampValueWithinBounds(double value, double lowerBound, double upperBound) {
-		double result = value;
-		if (value < lowerBound) {
-			result = lowerBound;
-		} else if (value > upperBound) {
-			result = upperBound;
-		}
-		return result;
-	}
-
 	/**
 	 * Generates a new set weighted according to a random pose.
 	 * 
@@ -121,9 +109,9 @@ public class RandomSample2DGenerator {
 			double sampleY = sample.getY();
 			double sampleTheta = sample.getTheta();
 
-			double xDensity = computeDensity(sampleX, realX, SamplingConstants.SIGMA_X);
-			double yDensity = computeDensity(sampleY, realY, SamplingConstants.SIGMA_Y);
-			double thetaDensity = computeDensity(sampleTheta, realTheta, SamplingConstants.SIGMA_THETA);
+			double xDensity = SamplingUtils.computeDensity(sampleX, realX, SamplingConstants.SIGMA_X);
+			double yDensity = SamplingUtils.computeDensity(sampleY, realY, SamplingConstants.SIGMA_Y);
+			double thetaDensity = SamplingUtils.computeDensity(sampleTheta, realTheta, SamplingConstants.SIGMA_ANGLE);
 			double weight = xDensity * yDensity * thetaDensity;
 			result.add(new Sample2D(sampleX, sampleY, sampleTheta, weight));
 		}
@@ -151,7 +139,7 @@ public class RandomSample2DGenerator {
 					// Create new sample
 					double x = random.nextGaussian() * SamplingConstants.SIGMA_X + sample.getX();
 					double y = random.nextGaussian() * SamplingConstants.SIGMA_Y + sample.getY();
-					double theta = random.nextGaussian() * SamplingConstants.SIGMA_THETA + sample.getTheta();
+					double theta = random.nextGaussian() * SamplingConstants.SIGMA_ANGLE + sample.getTheta();
 					double weight = 1.0 / originalSamples.size();
 					result.add(new Sample2D(x, y, theta, weight));
 					break;
@@ -159,12 +147,6 @@ public class RandomSample2DGenerator {
 			}
 		}
 		return result;
-	}
-
-	private double computeDensity(double value, double mean, double sigma) {
-		double base = 1.0 / (Math.sqrt(2 * Math.PI * sigma * sigma));
-		double exponent = -Math.pow(value - mean, 2) / (2 * sigma * sigma);
-		return base * Math.exp(exponent);
 	}
 
 	public static void main(String[] args) {
